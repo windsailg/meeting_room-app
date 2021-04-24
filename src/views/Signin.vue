@@ -92,7 +92,11 @@ export default {
         }
         const username = this.username
         const password = this.password
-        const res = await apis.getUser({ username, password })
+        const payLoad = {
+          username: this.username,
+          password: this.password
+        }
+        const res = await apis.getUser(payLoad)
         this.user = res.data[0]
         if (res.status !== 200) {
           throw new Error(res.statusText)

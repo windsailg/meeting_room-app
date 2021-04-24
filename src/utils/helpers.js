@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const baseURL = 'http://localhost:3000'
+let baseURL = ''
+// baseURL = 'http://localhost:3000'
+baseURL = 'https://meeting-room-api.herokuapp.com'
 
 export const apiHelper = axios.create({
   baseURL

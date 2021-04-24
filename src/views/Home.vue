@@ -36,8 +36,6 @@ import Navbar from '@/components/Navbar.vue'
 import apis from '../apis/apis'
 import { mapState } from 'vuex'
 
-import { Settings } from 'luxon'
-Settings.defaultLocale = 'zh-TW'
 export default {
   computed: {
     ...mapState([

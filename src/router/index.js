@@ -23,6 +23,16 @@ const routes = [
     component: () => import('../views/ReserveList.vue')
   },
   {
+    path: '/admin/rooms',
+    name: 'admin-rooms',
+    component: () => import('../views/AdminRooms.vue')
+  },
+  {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () => import('../views/AdminUsers.vue')
+  },
+  {
     path: '/signin',
     name: 'sign-in',
     component: Signin
@@ -30,6 +40,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  linkExactActiveClass: 'active',
   routes
 })
 

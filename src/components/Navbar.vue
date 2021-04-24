@@ -20,6 +20,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <router-link to="/reserve-list" class="dropdown-item text-dark" >我的預約</router-link>
+              <router-link v-if="currentUser.isAdmin" to="/admin/rooms" class="dropdown-item text-dark" >後臺管理</router-link>
               <div class="dropdown-item" @click.prevent.stop="logout">登出</div>
             </div>
           </li>
@@ -36,8 +37,6 @@
 <script>
 
 import { mapState } from 'vuex'
-
-
 
 export default {
   computed: {
