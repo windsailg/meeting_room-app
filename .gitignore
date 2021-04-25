@@ -2,9 +2,7 @@
 node_modules
 /dist
 deploy.sh
-autorun.txt
 autorun.cmd
-
 
 # local env files
 .env.local

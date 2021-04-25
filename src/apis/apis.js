@@ -36,6 +36,9 @@ export default {
     return apiHelper.delete(`/rooms/${id}`)
   },
   // reserve list
+  getReserveList () {
+    return apiHelper.get('/reserveList')
+  },
   getRoomReserve ({ RoomId }) {
     const searchParams = new URLSearchParams({ RoomId })
     return apiHelper.get(`/reserveList?${searchParams.toString()}`)
