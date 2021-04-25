@@ -2,7 +2,7 @@
   <div class="home">
     <Navbar />
 
-    <div class="py-5 container text-left">
+    <div class="py-5 pb-2 container text-left">
       <h2 class="mt-5 mb-4">會議室 {{ room.name }}</h2>
 
       <form class="row" @submit.prevent.stop="handleSubmit">
@@ -45,20 +45,15 @@
 
     <div class="mt-0 mb-5 container text-left">
 
-        <h4 class="mt-5 mb-4">已被預約的時段</h4>
+        <h2 class="mt-5 mb-4">已被預約的時段</h2>
         
-        <div class="row">
+        <FullCalendar
+          :options="calendarOptions"
+        />
 
-            <div v-for="reserve in reserveList" :key="reserve.id" class="card m-2 shadow-sm" style="width: 18rem;">
-                <div class="card-body">
-                    <span class="">From</span>
-                    <input href="#" class="btn-gray btn-block mt-1 mb-3" :value="reserve.from | time" disabled>
-                    <span class="">To</span>
-                    <input href="#" class="btn-gray btn-block mt-1 mb-3" :value="reserve.to | time" disabled>
-                </div>
-            </div>
+    </div>
 
-        </div>
+    <div class="py-2 pb-5 mb-5 container text-left">
 
     </div>
 
@@ -66,14 +61,22 @@
 </template>
 
 <script>
+
 import Navbar from '@/components/Navbar.vue'
 import apis from '../apis/apis'
 import { mapState } from 'vuex'
 import { Datetime } from 'vue-datetime'
 
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction"
+import allLocales from '@fullcalendar/core/locales-all';
+
 import moment from '.../../moment'
 import { Settings } from 'luxon'
 Settings.defaultLocale = 'zh-TW'
+
+
 
 export default {
   computed: {
@@ -83,15 +86,31 @@ export default {
   components: {
     Navbar,
     datetime: Datetime,
+    FullCalendar
   },
   data() {
     return {
-      reserveList: {},
+      reserveList: [],
       room: {},
       from: '',
       to: '',
       fromMin: '',
       toMin: '',
+      calendarOptions: {
+        plugins: [ dayGridPlugin, interactionPlugin ],
+        initialView: 'dayGridMonth',
+        dateClick: this.handleDateClick,
+        locales: allLocales,
+        locale: 'zh-TW' ,
+        displayEventTime: false,
+        events: [
+          {
+            title: 'Event title',
+            start: '2021-04-01T10:30:00',
+            end: '2021-04-01T11:30:00',
+          }
+        ]
+      }
     }
   },
   methods: {
@@ -102,6 +121,16 @@ export default {
         if (resRoom.status !== 200) {
           throw new Error(resRoom.statusText)
         }
+        const events = resReserve.data.map(r => {
+          return {
+            title: moment(r.from).format('HH:00') + ' ~ ' + moment(r.to).format('HH:00'),
+            start: r.from,
+            end: r.to,
+            display: 'block',
+            color: '#17a2b8'
+          }
+        })
+        this.calendarOptions.events = events
         this.reserveList = resReserve.data
         this.room = resRoom.data[0]
       } catch (error) {
@@ -114,6 +143,20 @@ export default {
           console.log("time doesn't exist")
           return
         }
+        const f = this.from
+        const t = this.to
+        const conflict = this.reserveList.filter(r => {
+          const rf = r.from
+          const rt = r.to
+          if( rt <= f || t <= rf ){
+            return
+          } else {
+            return r
+          }
+        })
+        if(conflict.length) {
+          return alert('該時間已被預定')
+        }
         const payLoad = {
           UserId: this.currentUser.id,
           RoomId: this.room.id,
@@ -125,13 +168,16 @@ export default {
           },
         }
         const res = await apis.createReserve(payLoad)
-        this.reserveList.push(res.data)
+        if (res.status !== 201) {
+          throw new Error(res.statusText)
+        }
+        this.fetchData(this.room.id)
         this.from = ''
         this.to = ''
       } catch (error) {
         console.log(error)
       }
-    },
+    }
   },
   filters: {
     time(date) {
@@ -154,3 +200,9 @@ export default {
   },
 }
 </script>
+
+<style>
+  .fc-view-harness a{
+    color:#17a2b8;
+  }
+</style>
