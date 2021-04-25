@@ -104,11 +104,6 @@ export default {
         locale: 'zh-TW' ,
         displayEventTime: false,
         events: [
-          {
-            title: 'Event title',
-            start: '2021-04-01T10:30:00',
-            end: '2021-04-01T11:30:00',
-          }
         ]
       }
     }
