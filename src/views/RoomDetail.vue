@@ -62,14 +62,26 @@
 
     </div>
 
+    <div class="py-5 container text-left">
+      <FullCalendar
+        :options="calendarOptions" 
+        :droppable="true"
+      />
+    </div>
+
   </div>
 </template>
 
 <script>
+
 import Navbar from '@/components/Navbar.vue'
 import apis from '../apis/apis'
 import { mapState } from 'vuex'
 import { Datetime } from 'vue-datetime'
+
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction"
 
 import moment from '.../../moment'
 import { Settings } from 'luxon'
@@ -83,6 +95,7 @@ export default {
   components: {
     Navbar,
     datetime: Datetime,
+    FullCalendar
   },
   data() {
     return {
@@ -92,6 +105,15 @@ export default {
       to: '',
       fromMin: '',
       toMin: '',
+      calendarOptions: {
+        plugins: [ dayGridPlugin, interactionPlugin ],
+        initialView: 'dayGridMonth',
+        dateClick: this.handleDateClick,
+        events: [
+          { title: 'event 1', date: '2021-04-24' },
+          { title: 'event 2', date: '2021-04-25' }
+        ]
+      }
     }
   },
   methods: {
@@ -132,6 +154,9 @@ export default {
         console.log(error)
       }
     },
+    handleDateClick (arg) {
+      alert('date click! ' + arg.dateStr)
+    }
   },
   filters: {
     time(date) {
@@ -144,6 +169,9 @@ export default {
     this.fromMin = now
     const { id } = this.$route.params
     this.fetchData(id)
+  },
+  mounted() {
+    this.setupDraggable()
   },
   watch: {
     from(newValue) {

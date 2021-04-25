@@ -4,7 +4,8 @@
 
     <div class="py-5 container text-left">
 
-        <AdminNavbar />
+      <AdminNavbar />
+      
       <h1 class="mt-5 mb-4">使用者管理</h1>
       <div class="row col-md-6 mt-4 mb-4">
 
@@ -83,10 +84,6 @@
               </button>
 
             </form>
-
-
-
-
 
           </div>
         </div>
