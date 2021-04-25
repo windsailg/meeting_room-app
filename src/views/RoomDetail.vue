@@ -51,19 +51,6 @@
           :options="calendarOptions"
         />
 
-        <div class="row mt-5">
-
-            <div v-for="reserve in reserveList" :key="reserve.id" class="card m-2 shadow-sm" style="width: 18rem;">
-                <div class="card-body">
-                    <span>From</span>
-                    <input class="btn-gray btn-block mt-1 mb-3" :value="reserve.from | time" disabled>
-                    <span>To</span>
-                    <input class="btn-gray btn-block mt-1 mb-3" :value="reserve.to | time" disabled>
-                </div>
-            </div>
-
-        </div>
-
     </div>
 
     <div class="py-2 pb-5 mb-5 container text-left">
