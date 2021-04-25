@@ -168,7 +168,6 @@ export default {
           },
         }
         const res = await apis.createReserve(payLoad)
-        console.log(res)
         if (res.status !== 201) {
           throw new Error(res.statusText)
         }
