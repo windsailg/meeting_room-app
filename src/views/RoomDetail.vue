@@ -211,7 +211,9 @@ export default {
 
 <style>
   .fc-view-harness a{
-    color:#17a2b8;
+    color:#222;
+    font-weight: bold;
+    /* text-shadow: 0 0 1px #666666cc; */
   }
 
 </style>

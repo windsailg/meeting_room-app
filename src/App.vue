@@ -33,8 +33,9 @@ export default {
     color: #42b983;
   }
   .opacity__background{
-    background-color: #ffffffcc;
+    background-color: #ffffff79;
     box-sizing: border-box;
+    backdrop-filter: blur(10px);
   }
   .card-deck .card{
     flex: unset;
@@ -48,15 +49,15 @@ export default {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background-image: url('/images/0.png');
+    background-image: url('https://windsailg.github.io/meeting_room/images/0.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    filter: blur(3px);
-    opacity:.6;
+    filter: blur(0px);
+    opacity:1;
     pointer-events: none;
-
+    transform: scale(1.05);
     z-index: -1;
   }
 
