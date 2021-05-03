@@ -29,7 +29,13 @@
               disabled
             />
              
-             <button class="btn btn-warning" @click.prevent.stop="deleteReserve({ time: reserve.from, id: reserve.id})">取消預約</button>
+             <button
+              class="btn btn-warning" 
+              @click.prevent.stop="deleteReserve({ time: reserve.from, id: reserve.id})"
+              :disabled="isProcessing"
+             >
+               {{ isProcessing ?  '處理中...' : '取消預約' }}
+            </button>
           </div>
 
         </div>
@@ -45,6 +51,7 @@
 import Navbar from '@/components/Navbar.vue'
 import apis from '../apis/apis'
 import { mapState } from 'vuex'
+import { iziToast } from '../utils/helpers'
 import moment from '.../../moment'
 
 import { Settings } from 'luxon'
@@ -60,7 +67,8 @@ export default {
   data() {
     return {
       reserveList: {},
-      rooms: {}
+      rooms: {},
+      isProcessing: false
     }
   },
   methods: {
@@ -81,16 +89,21 @@ export default {
     },
     async deleteReserve(payLoad) {
       try {
+        this.isProcessing = true
         const now = new Date()
         if ((Date.parse(payLoad.time)).valueOf() < (Date.parse(now)).valueOf()) {
-          return alert('已使用無法取消')
+          this.isProcessing = false
+          return this.$toast.error(' ', '已開始的時段無法取消', iziToast.options.error)
         }
         const res = await apis.deleteReserve({ id: payLoad.id })
         if (res.status !== 200) {
           throw new Error(res.statusText)
         }
         this.fetchData()
+        this.$toast.show(' ', '成功取消預約', iziToast.options.success)
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.log(error)
       }
     }

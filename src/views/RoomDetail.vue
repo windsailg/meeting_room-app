@@ -36,7 +36,13 @@
               :minute-step="60"
               format="MM月dd日 HH:mm"
             />
-            <button type="submit" class="btn btn-info mt-2" :disabled="!from">預約</button>
+            <button
+              type="submit"
+              class="btn btn-info mt-2" 
+              :disabled="!from || isProcessing"
+            >
+            {{ isProcessing ?  '處理中...' : '預約' }}
+            </button>
           </div>
         </div>
       </form>
@@ -66,6 +72,7 @@ import Navbar from '@/components/Navbar.vue'
 import apis from '../apis/apis'
 import { mapState } from 'vuex'
 import { Datetime } from 'vue-datetime'
+import { iziToast } from '../utils/helpers'
 
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -96,6 +103,7 @@ export default {
       to: '',
       fromMin: '',
       toMin: '',
+      isProcessing: false,
       calendarOptions: {
         plugins: [ dayGridPlugin, interactionPlugin ],
         initialView: 'dayGridMonth',
@@ -134,9 +142,9 @@ export default {
     },
     async handleSubmit() {
       try {
+        this.isProcessing = true
         if(!this.from || !this.to) {
-          console.log("time doesn't exist")
-          return
+          return this.$toast.error(' ', '請填入正確的時間', iziToast.options.error)
         }
         const f = this.from
         const t = this.to
@@ -150,7 +158,8 @@ export default {
           }
         })
         if(conflict.length) {
-          return alert('該時間已被預定')
+          this.isProcessing = false
+          return this.$toast.error(' ', '該時段已被預定', iziToast.options.error)
         }
         const payLoad = {
           UserId: this.currentUser.id,
@@ -169,7 +178,11 @@ export default {
         this.fetchData(this.room.id)
         this.from = ''
         this.to = ''
+        this.$toast.show(' ', '成功預約會議室', iziToast.options.success)
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
+        this.$toast.error(' ', '預約失敗，請稍後再試', iziToast.options.error)
         console.log(error)
       }
     }

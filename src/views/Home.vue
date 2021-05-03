@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- <Loading :class="{ 'fade-out': !isLoading }" /> -->
     <Navbar />
 
     <div class="py-5 container text-left">
@@ -65,6 +66,7 @@
                   }"
                   class="btn btn-info"
                 >預約
+                
                 </router-link>
             </div>
         </div>
@@ -79,6 +81,8 @@
 <script>
 
 import Navbar from '@/components/Navbar.vue'
+import Loading from '@/components/Loading.vue'
+import { iziToast } from '../utils/helpers'
 import apis from '../apis/apis'
 import moment from '.../../moment'
 import { mapState } from 'vuex'
@@ -96,6 +100,7 @@ export default {
   name: 'Home',
   components: {
     Navbar,
+    // Loading,
     datetime: Datetime,
   },
   data() {
@@ -104,11 +109,14 @@ export default {
       searchedRooms: [],
       searchDate: '',
       fromMin: '',
+      isProcessing: false,
+      isLoading: false
     }
   },
   methods: {
     async fetchData() {
       try{
+        this.isLoading = true
         if(!this.currentUser) {
           console.log('name or password error')
           return
@@ -118,13 +126,14 @@ export default {
           throw new Error(res.statusText)
         }
         this.rooms = res.data
+        this.isLoading = false
       } catch (error) {
         console.log(error)
       }
     },
     async searchReserveDate() {
       try {
-        if (!this.searchDate) return alert('請輸入時間')
+        if (!this.searchDate) return this.$toast.show(' ', '請輸入時間.', iziToast.options.info)
         const res = await apis.getReserveList()
         const compareTime = (from, to) => {
             const dateSearch = Date.parse(this.searchDate)
@@ -139,7 +148,7 @@ export default {
 
         if (!serachResult.length) {
           this.searchedRooms = this.rooms
-          return
+          return this.$toast.show(' ', '該時段無可用的會議室.', iziToast.options.info)
         }
         
         this.searchedRooms = this.rooms.reduce((acc, r) => {

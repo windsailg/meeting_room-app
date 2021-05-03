@@ -18,7 +18,13 @@
                 aria-describedby="button-addon2"
             >
             <div class="input-group-append">
-                <button class="btn btn-info" type="submit" >新增會議室</button>
+                <button
+                  class="btn btn-info"
+                  type="submit"
+                  :disabled="isProcessing"
+                >
+                {{ isProcessing ?  '處理中...' : '新增會議室' }}
+                </button>
             </div>
         </form>
 
@@ -38,8 +44,9 @@
               v-if="room.isEditing"
               @click.prevent.stop="updateRoom({ id: room.id, name: room.name })"
               class="btn btn-success mr-2"
+              :disabled="isProcessing"
             >
-              儲存
+              {{ isProcessing ?  '處理中...' : '儲存' }}
             </button>
 
             <button
@@ -58,7 +65,9 @@
               取消
             </button>
 
-            <button @click.prevent.stop="deleteRoom(room.id)" class="btn btn-warning">
+            <button @click.prevent.stop="deleteRoom(room.id)" class="btn btn-warning"
+              :disabled="isProcessing"
+            >
               刪除
             </button>
           </div>
@@ -71,6 +80,7 @@
 <script>
 import Navbar from '@/components/Navbar.vue'
 import AdminNavbar from '@/components/AdminNavbar.vue'
+import { iziToast } from '../utils/helpers'
 
 import apis from '../apis/apis'
 import { mapState } from 'vuex'
@@ -87,16 +97,14 @@ export default {
   data() {
     return {
       rooms: {},
-      newRoom: ''
+      newRoom: '',
+      isProcessing: false
     }
   },
   methods: {
     async fetchData() {
       try {
-        if (!this.currentUser) {
-          console.log('name or password error')
-          return
-        }
+        this.isProcessing = true
         const res = await apis.getRooms()
         if (res.status !== 200) {
           throw new Error(res.statusText)
@@ -107,7 +115,9 @@ export default {
           isEditing: false,
           nameCatched: '',
         }))
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.log(error)
       }
     },
@@ -125,8 +135,9 @@ export default {
     },
     async updateRoom({ id, name }) {
       try {
+        this.isProcessing = true
         if (!name.trim()) {
-          return alert('名稱不得為空')
+          return this.$toast.show(' ', '名稱不得為空', iziToast.options.info)
         }
         const res = await apis.updateRoom({ id, name })
         if (res.status !== 200) {
@@ -135,14 +146,19 @@ export default {
         this.rooms = this.rooms.map((r) =>
           r.id === id ? { ...r, isEditing: false } : r,
         )
+        this.isProcessing = false
+        this.$toast.show(' ', '名稱已成功修改', iziToast.options.success)
       } catch (error) {
+        this.isProcessing = false
+        this.$toast.error(' ', '修改失敗，請稍後再試', iziToast.options.error)
         console.log(error)
       }
     },
     async createRoom() {
       try {
+        this.isProcessing = true
         if (!this.newRoom.trim()) {
-          return alert('名稱不得為空')
+          return this.$toast.show(' ', '名稱不得為空', iziToast.options.info)
         }
         const res = await apis.createRoom({ name: this.newRoom })
         if (res.status !== 201) {
@@ -150,28 +166,38 @@ export default {
         }
         this.newRoom = ''
         this.fetchData()
+        this.isProcessing = false
+        this.$toast.show(' ', '成功新增會議室', iziToast.options.success)
       } catch (error) {
+        this.isProcessing = false
+        this.$toast.error(' ', '新增失敗，請稍後再試', iziToast.options.error)
         console.log(error)
       }
     },
     async deleteRoom(id) {
        try {
+         this.isProcessing = true
         if (!id) {
-          return alert('操作錯誤')
+          return this.$toast.error(' ', '操作錯誤，請稍後再試', iziToast.options.error)
         }
         const resReserve = await apis.getRoomReserve({ RoomId: id })
         if (resReserve.status !== 200) {
           throw new Error(resReserve.statusText)
         }
         if (resReserve.data.length) {
-          return alert('該會議室已有預定，無法刪除')
+          this.isProcessing = false
+          return this.$toast.error(' ', '該會議室已有預定，無法刪除', iziToast.options.error)
         }
         const resDelete = await apis.deleteRoom({ id })
         if (resDelete.status !== 200) {
           throw new Error(resDelete.statusText)
         }
         this.fetchData()
+        this.isProcessing = false
+        this.$toast.show(' ', '成功刪除會議室', iziToast.options.success)
       } catch (error) {
+        this.isProcessing = false
+        this.$toast.error(' ', '刪除失敗，請稍後再試', iziToast.options.error)
         console.log(error)
       }
     },

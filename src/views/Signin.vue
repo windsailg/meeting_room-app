@@ -48,8 +48,9 @@
             <button
               type="submit"
               class="mt-3 btn btn-info btn-block"
+              :disabled="isProcessing"
             >
-              送出
+              {{isProcessing ? '登入中...' : '登入'}}
             </button>
 
           </form>
@@ -66,6 +67,7 @@
 <script>
 import apis from '../apis/apis'
 import Navbar from '@/components/Navbar.vue'
+import { iziToast } from '../utils/helpers'
 
 export default {
   name: 'Signin',
@@ -86,8 +88,10 @@ export default {
   methods: {
     async handleSubmit() {
       try{
+        this.isProcessing = true
         if(!this.username || !this.password) {
           console.log('username or password error')
+          this.isProcessing = false
           return 
         }
         const username = this.username
@@ -98,16 +102,17 @@ export default {
         }
         const res = await apis.getUser(payLoad)
         this.user = res.data[0]
-        if (res.status !== 200) {
+        if (res.status !== 200 || !res.data[0] ) {
           throw new Error(res.statusText)
         }
         this.$store.commit('setCurrentUser', this.user)
         const userObj = { username, password }
         window.localStorage.setItem('userObj',JSON.stringify(userObj))
         this.$router.push('/').catch(err => {err})
+        this.$toast.show(' ', '成功登入.', iziToast.options.success)
       } catch (error) {
-        this.email = ''
-        this.password = ''
+        this.$toast.error(' ', '登入失敗，請確認輸入的使用者資訊是否正確', iziToast.options.error)
+        this.isProcessing = false
         console.log(error)
       }
     }
