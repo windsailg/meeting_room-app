@@ -34,7 +34,9 @@ export default {
   }
   .opacity__background{
     background-color: #ffffff79;
-    box-sizing: border-box;
+    
+  }
+  .frosted__glass{
     backdrop-filter: blur(10px);
   }
   .card-deck .card{

@@ -49,7 +49,7 @@
 
     </div>
 
-    <div class="mt-0 mb-5 container text-left shadow p-5 pt-1 opacity__background">
+    <div class="mt-0 mb-5 container text-left shadow p-5 pt-1 opacity__background frosted__glass">
 
         <h2 class="mt-3 mb-4">已被預約的時段</h2>
         

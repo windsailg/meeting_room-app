@@ -39,7 +39,7 @@
           class="col-md-3 mb-4"
         >
           <div
-            class="card opacity__background"
+            class="card opacity__background frosted__glass"
           >
             <div class="card-body">
             

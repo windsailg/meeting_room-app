@@ -11,7 +11,7 @@
           class="col-md-4 mb-4"
         >
           <div
-            class="card opacity__background"
+            class="card opacity__background frosted__glass"
           >
             <div class="card-body">
               <h5 class="card-title">{{ reserve.room.name }}</h5>

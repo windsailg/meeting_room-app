@@ -36,7 +36,7 @@
           class="col-md-4 mb-4"
         >
           <div
-            class="card opacity__background"
+            class="card shadow opacity__background frosted__glass"
           >
             <div class="card-body">
               <h3 v-if="!room.isEditing" class="card-title">{{ room.name }}</h3>

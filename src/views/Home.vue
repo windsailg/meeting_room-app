@@ -29,7 +29,7 @@
       
       <div v-show="!searchedRooms.length" class="row card-deck">
         <div v-for="room in rooms" :key="room.id" class="col-md-3 mb-4">
-          <div  class="card opacity__background">
+          <div  class="card opacity__background shadow frosted__glass">
               <div class="card-body">
                   <h3 class="card-title">{{room.name}}</h3>
                   <router-link 
@@ -56,7 +56,7 @@
       <div v-show="searchedRooms.length" class="row card-deck">
         
         <div v-for="searchedRoom in searchedRooms" :key="searchedRoom.id" class="col-md-3 mb-4">
-          <div class="card opacity__background">
+          <div class="card shadow opacity__background frosted__glass">
               <div class="card-body">
                   <h3 class="card-title">{{searchedRoom.name}}</h3>
                   <router-link 
