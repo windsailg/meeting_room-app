@@ -5,7 +5,7 @@
 
     <div class="py-5 container text-left">
 
-      <div class=" mt-5 mb-5">
+      <div class="mt-5 mb-5 ">
           <span class="">查詢空閒會議室</span>
           <datetime
             class="mb-3"
@@ -27,48 +27,51 @@
         <h2 class="mt-5 mb-4">所有會議室</h2>
       </div>
       
-      <div v-show="!searchedRooms.length" class="row">
-
-        <div v-for="room in rooms" :key="room.id" class="card m-2" style="width: 18rem;">
-            <div class="card-body">
-                <h3 class="card-title">{{room.name}}</h3>
-                <router-link 
-                  :to="{
-                    name: 'room-detail',
-                    params: {
-                      id: room.id
-                    }
-                  }"
-                  class="btn btn-info"
-                >預約
-                </router-link>
-            </div>
+      <div v-show="!searchedRooms.length" class="row card-deck">
+        <div v-for="room in rooms" :key="room.id" class="col-md-3 mb-4">
+          <div  class="card opacity__background">
+              <div class="card-body">
+                  <h3 class="card-title">{{room.name}}</h3>
+                  <router-link 
+                    :to="{
+                      name: 'room-detail',
+                      params: {
+                        id: room.id
+                      }
+                    }"
+                    class="btn btn-info"
+                  >預約
+                  </router-link>
+              </div>
+          </div>
         </div>
 
       </div>
 
 
       <div v-show="searchedRooms.length" class="row m-0 mt-5">
-        <h2  class="mt-5 mb-4">空閒的會議室</h2>
+        <h2 class="mt-5 mb-4">空閒的會議室</h2>
       </div>
 
-      <div v-show="searchedRooms.length" class="row">
+      <div v-show="searchedRooms.length" class="row card-deck">
         
-        <div v-for="searchedRoom in searchedRooms" :key="searchedRoom.id" class="card m-2" style="width: 18rem;">
-            <div class="card-body">
-                <h3 class="card-title">{{searchedRoom.name}}</h3>
-                <router-link 
-                  :to="{
-                    name: 'room-detail',
-                    params: {
-                      id: searchedRoom.id
-                    }
-                  }"
-                  class="btn btn-info"
-                >預約
-                
-                </router-link>
-            </div>
+        <div v-for="searchedRoom in searchedRooms" :key="searchedRoom.id" class="col-md-3 mb-4">
+          <div class="card opacity__background">
+              <div class="card-body">
+                  <h3 class="card-title">{{searchedRoom.name}}</h3>
+                  <router-link 
+                    :to="{
+                      name: 'room-detail',
+                      params: {
+                        id: searchedRoom.id
+                      }
+                    }"
+                    class="btn btn-info"
+                  >預約
+                  
+                  </router-link>
+              </div>
+          </div>
         </div>
 
       </div>

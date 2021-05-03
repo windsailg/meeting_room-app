@@ -5,8 +5,8 @@
 
     <div class="container">
 
-      <div class="row justify-content-center">
-        <div class="card col-lg-5 p-5 shadow mt-5 signin__board">
+      <div class="row justify-content-center ">
+        <div class="card col-lg-5 p-5 shadow mt-5 signin__board opacity__background">
 
           <div class="row logo flex justify-content-center mt-2">
             <h3 class="col-lg-12 text-center mb-3 font-weight-normal mt-2">

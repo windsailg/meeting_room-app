@@ -32,61 +32,65 @@
 
       </div>
 
-      <div class="row">
+      <div class="row card-deck">
         <div
           v-for="user in users"
           :key="user.id"
-          class="card m-3"
-          style="width: 18rem;"
+          class="col-md-3 mb-4"
         >
-          <div class="card-body">
-          
-            <form>
+          <div
+            class="card opacity__background"
+          >
+            <div class="card-body">
+            
+              <form>
 
-              <div class="form-group">
-                <label for="username">Username</label>
-                <h3 v-if="!user.isEditing" class="card-title">{{ user.username }}</h3>
-                <input v-else type="name" class="form-control" v-model="user.username" name="username" aria-describedby="emailHelp" placeholder="輸入使用者名稱">
-              </div>
+                <div class="form-group ">
+                  <label for="username">Username</label>
+                  <h3 v-if="!user.isEditing" class="card-title">{{ user.username }}</h3>
+                  <input v-else type="name" class="form-control" v-model="user.username" name="username" aria-describedby="emailHelp" placeholder="輸入使用者名稱">
+                </div>
 
-              <div class="form-group">
-                <label for="password">Password</label>
-                <h3 v-if="!user.isEditing" class="card-title">{{ user.password }}</h3>
-                <input v-else type="password" class="form-control" v-model="user.password" name="password" placeholder="輸入使用者密碼">
-              </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <h3 v-if="!user.isEditing" class="card-title">{{ user.password }}</h3>
+                  <input v-else type="password" class="form-control" v-model="user.password" name="password" placeholder="輸入使用者密碼">
+                </div>
 
-              <button
-                  v-if="!user.isEditing"
-                  @click.prevent.stop="toggleEdit(user.id)"
+                <button
+                    v-if="!user.isEditing"
+                    @click.prevent.stop="toggleEdit(user.id)"
+                    class="btn btn-info btn-sm mr-2"
+                >
+                  修改
+                </button>
+
+                <button
+                  v-else
+                  class="btn btn-success btn-sm mr-2"
+                  @click.prevent.stop="updateUser({ id: user.id, username: user.username, password: user.password })"
+                >
+                  儲存
+                </button>
+
+                <button
+                  v-if="user.isEditing"
+                  @click.prevent.stop="toggleCancel(user.id)"
                   class="btn btn-info btn-sm mr-2"
-              >
-                修改
-              </button>
+                >
+                  取消
+                </button>
 
-              <button
-                v-else
-                class="btn btn-success btn-sm mr-2"
-                @click.prevent.stop="updateUser({ id: user.id, username: user.username, password: user.password })"
-              >
-                儲存
-              </button>
+                <button @click.prevent.stop="deleteUser(user.id)" class="btn btn-warning btn-sm">
+                  刪除
+                </button>
 
-              <button
-                v-if="user.isEditing"
-                @click.prevent.stop="toggleCancel(user.id)"
-                class="btn btn-info btn-sm mr-2"
-              >
-                取消
-              </button>
+              </form>
 
-              <button @click.prevent.stop="deleteUser(user.id)" class="btn btn-warning btn-sm">
-                刪除
-              </button>
-
-            </form>
-
+            </div>
           </div>
         </div>
+
       </div>
 
     </div>

@@ -2,11 +2,11 @@
   <div class="home">
     <Navbar />
 
-    <div class="py-5 pb-2 container text-left">
+    <div class="py-5 pb-2 container text-left ">
       <h2 class="mt-5 mb-4">會議室 {{ room.name }}</h2>
 
       <form class="row" @submit.prevent.stop="handleSubmit">
-        <div class="card p-3 pb-4 shadow col-6" >
+        <div class="card p-3 pb-4 shadow col-6 opacity__background">
           <div class="card-body">
             <h3 class="card-title"></h3>
             <h5 class="card-text mt-4">選擇時段:</h5>
@@ -49,9 +49,9 @@
 
     </div>
 
-    <div class="mt-0 mb-5 container text-left">
+    <div class="mt-0 mb-5 container text-left shadow p-5 pt-1 opacity__background">
 
-        <h2 class="mt-5 mb-4">已被預約的時段</h2>
+        <h2 class="mt-3 mb-4">已被預約的時段</h2>
         
         <FullCalendar
           :options="calendarOptions"
@@ -213,4 +213,5 @@ export default {
   .fc-view-harness a{
     color:#17a2b8;
   }
+
 </style>

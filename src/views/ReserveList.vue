@@ -4,40 +4,43 @@
 
     <div class="py-5 container text-left">
       <h2 class="mt-5 mb-4">我的預約</h2>
-      <div class="row">
+      <div class="row card-deck">
         <div
           v-for="reserve in reserveList"
           :key="reserve.id"
-          class="card m-2"
-          style="width: 18rem;"
+          class="col-md-4 mb-4"
         >
-          <div class="card-body">
-            <h5 class="card-title">{{ reserve.room.name }}</h5>
-            <p class="card-text">預約的時段.</p>
-            <span class="">From</span>
-            <input
-              href="#"
-              class="btn-gray btn-block mt-1 mb-3"
-              :value="reserve.from | time"
-              disabled
-            />
-            <span class="">To</span>
-            <input
-              href="#"
-              class="btn-gray btn-block mt-1 mb-3"
-              :value="reserve.to | time"
-              disabled
-            />
-             
-             <button
-              class="btn btn-warning" 
-              @click.prevent.stop="deleteReserve({ time: reserve.from, id: reserve.id})"
-              :disabled="isProcessing"
-             >
-               {{ isProcessing ?  '處理中...' : '取消預約' }}
-            </button>
-          </div>
+          <div
+            class="card opacity__background"
+          >
+            <div class="card-body">
+              <h5 class="card-title">{{ reserve.room.name }}</h5>
+              <p class="card-text">預約的時段.</p>
+              <span class="">From</span>
+              <input
+                href="#"
+                class="btn-gray btn-block mt-1 mb-3"
+                :value="reserve.from | time"
+                disabled
+              />
+              <span class="">To</span>
+              <input
+                href="#"
+                class="btn-gray btn-block mt-1 mb-3"
+                :value="reserve.to | time"
+                disabled
+              />
+              
+              <button
+                class="btn btn-warning" 
+                @click.prevent.stop="deleteReserve({ time: reserve.from, id: reserve.id})"
+                :disabled="isProcessing"
+              >
+                {{ isProcessing ?  '處理中...' : '取消預約' }}
+              </button>
+            </div>
 
+          </div>
         </div>
       </div>
       <div class="row">

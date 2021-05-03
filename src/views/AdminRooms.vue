@@ -29,47 +29,50 @@
         </form>
 
       </div>
-      <div class="row">
+      <div class="row card-deck">
         <div
           v-for="room in rooms"
           :key="room.id"
-          class="card m-3"
-          style="width: 18rem;"
+          class="col-md-4 mb-4"
         >
-          <div class="card-body">
-            <h3 v-if="!room.isEditing" class="card-title">{{ room.name }}</h3>
-            <input v-else class="mb-3" v-model="room.name" />
+          <div
+            class="card opacity__background"
+          >
+            <div class="card-body">
+              <h3 v-if="!room.isEditing" class="card-title">{{ room.name }}</h3>
+              <input v-else class="mb-3" v-model="room.name" />
 
-            <button
-              v-if="room.isEditing"
-              @click.prevent.stop="updateRoom({ id: room.id, name: room.name })"
-              class="btn btn-success mr-2"
-              :disabled="isProcessing"
-            >
-              {{ isProcessing ?  '處理中...' : '儲存' }}
-            </button>
+              <button
+                v-if="room.isEditing"
+                @click.prevent.stop="updateRoom({ id: room.id, name: room.name })"
+                class="btn btn-success mr-2"
+                :disabled="isProcessing"
+              >
+                {{ isProcessing ?  '處理中...' : '儲存' }}
+              </button>
 
-            <button
-              v-if="!room.isEditing"
-              @click.prevent.stop="toggleEdit(room.id)"
-              class="btn btn-info mr-2"
-            >
-              修改
-            </button>
+              <button
+                v-if="!room.isEditing"
+                @click.prevent.stop="toggleEdit(room.id)"
+                class="btn btn-info mr-2"
+              >
+                修改
+              </button>
 
-            <button
-              v-else
-              @click.prevent.stop="toggleCancel(room.id)"
-              class="btn btn-info mr-2"
-            >
-              取消
-            </button>
+              <button
+                v-else
+                @click.prevent.stop="toggleCancel(room.id)"
+                class="btn btn-info mr-2"
+              >
+                取消
+              </button>
 
-            <button @click.prevent.stop="deleteRoom(room.id)" class="btn btn-warning"
-              :disabled="isProcessing"
-            >
-              刪除
-            </button>
+              <button @click.prevent.stop="deleteRoom(room.id)" class="btn btn-warning"
+                :disabled="isProcessing"
+              >
+                刪除
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -137,6 +140,7 @@ export default {
       try {
         this.isProcessing = true
         if (!name.trim()) {
+          this.isProcessing = false
           return this.$toast.show(' ', '名稱不得為空', iziToast.options.info)
         }
         const res = await apis.updateRoom({ id, name })
@@ -158,6 +162,7 @@ export default {
       try {
         this.isProcessing = true
         if (!this.newRoom.trim()) {
+          this.isProcessing = false
           return this.$toast.show(' ', '名稱不得為空', iziToast.options.info)
         }
         const res = await apis.createRoom({ name: this.newRoom })
